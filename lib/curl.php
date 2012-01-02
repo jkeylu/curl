@@ -168,7 +168,9 @@ class Curl {
     function request($method, $url, $vars = array()) {
         $this->error = '';
         $this->request = curl_init();
-        if (is_array($vars)) $vars = http_build_query($vars, '', '&');
+		if ( !empty($vars) && is_array($vars) ) {
+			$vars = http_build_query($vars, '', '&');
+		}
         
         $this->set_request_method($method);
         $this->set_request_options($url, $vars);
@@ -234,7 +236,9 @@ class Curl {
     **/
     protected function set_request_options($url, $vars) {
         curl_setopt($this->request, CURLOPT_URL, $url);
-        if (!empty($vars)) curl_setopt($this->request, CURLOPT_POSTFIELDS, $vars);
+		if (!empty($vars) || $vars==='') {
+			curl_setopt($this->request, CURLOPT_POSTFIELDS, $vars);
+		}
         
         # Set some default CURL options
         curl_setopt($this->request, CURLOPT_HEADER, true);
